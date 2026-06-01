@@ -1,0 +1,284 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Administrador</title>
+
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+
+<style>
+
+.estado-tiempo{
+  background:#70b318;
+  font-weight:bold;
+}
+
+.estado-tarde{
+  background:#e0bc2b;
+  font-weight:bold;
+}
+
+.estado-muy-tarde{
+  background:#d12340;
+  color:white;
+  font-weight:bold;
+}
+
+.estado-anticipado{
+  background:#2ff0f7;
+  font-weight:bold;
+}
+
+</style>
+
+</head>
+
+<body>
+
+<div class="container mt-4">
+
+<h2>Panel Administrador</h2>
+
+<div class="d-flex justify-content-between align-items-center mb-3">
+
+  <h4>Todos los registros</h4>
+
+  <button class="btn btn-danger" onclick="cerrarSesion()">
+    Cerrar sesión
+  </button>
+
+</div>
+
+<!-- FILTROS -->
+
+<div class="row mb-3">
+
+  <div class="col-md-4">
+    <input
+      type="text"
+      id="filtroNombre"
+      class="form-control"
+      placeholder="Buscar conductor..."
+      onkeyup="cargar()">
+  </div>
+
+  <div class="col-md-4">
+    <input
+      type="date"
+      id="filtroFecha"
+      class="form-control"
+      onchange="cargar()">
+  </div>
+
+  <div class="col-md-2">
+    <button
+      class="btn btn-secondary w-100"
+      onclick="limpiarFiltros()">
+      Limpiar
+    </button>
+  </div>
+
+</div>
+
+<!-- TARJETAS -->
+
+<div class="row mb-4">
+
+  <div class="col-md-3">
+    <div class="card text-center">
+      <div class="card-body">
+        <h5>Total</h5>
+        <h3 id="total">0</h3>
+      </div>
+    </div>
+  </div>
+
+  <div class="col-md-3">
+    <div class="card text-center">
+      <div class="card-body">
+        <h5>A Tiempo</h5>
+        <h3 id="atiempo">0</h3>
+      </div>
+    </div>
+  </div>
+
+  <div class="col-md-3">
+    <div class="card text-center">
+      <div class="card-body">
+        <h5>Tarde</h5>
+        <h3 id="tarde">0</h3>
+      </div>
+    </div>
+  </div>
+
+  <div class="col-md-3">
+    <div class="card text-center">
+      <div class="card-body">
+        <h5>Anticipado</h5>
+        <h3 id="anticipado">0</h3>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<!-- TABLA -->
+
+<table class="table table-bordered table-hover">
+
+<thead>
+
+<tr>
+<th>ID</th>
+<th>Nombre</th>
+<th>Fecha</th>
+<th>Hora</th>
+<th>Ruta</th>
+<th>Estado</th>
+</tr>
+
+</thead>
+
+<tbody id="tabla">
+
+</tbody>
+
+</table>
+
+</div>
+
+<script>
+
+const URL =
+"https://script.google.com/macros/s/AKfycbxyDnxmULakEOrZuoXtDwZDHiZ39mCg7B1x6xtYJNA4iGSYHtIfzop8aFliUJxsiVedXw/exec?action=listar";
+
+function cerrarSesion(){
+
+  localStorage.clear();
+  window.location.href = "login.html";
+}
+
+function limpiarFiltros(){
+
+  document.getElementById("filtroNombre").value = "";
+  document.getElementById("filtroFecha").value = "";
+
+  cargar();
+}
+
+async function cargar(){
+
+  const res = await fetch(URL);
+  const datos = await res.json();
+
+  const nombreBuscado =
+    document.getElementById("filtroNombre")
+    .value
+    .toLowerCase();
+
+  const fechaBuscada =
+    document.getElementById("filtroFecha")
+    .value;
+
+  let html = "";
+
+  let total = 0;
+  let atiempo = 0;
+  let tarde = 0;
+  let anticipado = 0;
+
+  datos.reverse().forEach(r => {
+
+    let nombreCompleto =
+      `${r.nombre} ${r.apellido}`.toLowerCase();
+
+    if (
+      nombreBuscado &&
+      !nombreCompleto.includes(nombreBuscado)
+    ) {
+      return;
+    }
+
+    let fechaFiltro = "";
+
+    if (String(r.fecha).includes("T")) {
+
+      const f = new Date(r.fecha);
+
+      fechaFiltro =
+        f.getFullYear() + "-" +
+        String(f.getMonth() + 1).padStart(2,"0") + "-" +
+        String(f.getDate()).padStart(2,"0");
+    }
+
+    if (
+      fechaBuscada &&
+      fechaFiltro !== fechaBuscada
+    ) {
+      return;
+    }
+
+    total++;
+
+    if(r.estado === "A TIEMPO") atiempo++;
+    if(r.estado === "TARDE") tarde++;
+    if(r.estado === "ANTICIPADO") anticipado++;
+
+    let fecha = r.fecha;
+    let hora = r.hora;
+
+    if(String(fecha).includes("T")){
+      fecha = new Date(fecha).toLocaleDateString("es-SV");
+    }
+
+    if(String(hora).includes("T")){
+      hora = new Date(hora).toLocaleTimeString("es-SV");
+    }
+
+    let colorEstado = "";
+
+    if(r.estado === "A TIEMPO"){
+      colorEstado = "table-success";
+    }
+    else if(r.estado === "TARDE"){
+      colorEstado = "table-warning";
+    }
+    else if(r.estado === "MUY TARDE"){
+      colorEstado = "table-danger";
+    }
+    else if(r.estado === "ANTICIPADO"){
+      colorEstado = "table-info";
+    }
+
+    html += `
+      <tr>
+        <td>${r.id}</td>
+        <td>${r.nombre} ${r.apellido}</td>
+        <td>${fecha}</td>
+        <td>${hora}</td>
+        <td>${r.ruta}</td>
+        <td class="${colorEstado}">
+          <strong>${r.estado}</strong>
+        </td>
+      </tr>
+    `;
+  });
+
+  document.getElementById("tabla").innerHTML = html;
+
+  document.getElementById("total").innerText = total;
+  document.getElementById("atiempo").innerText = atiempo;
+  document.getElementById("tarde").innerText = tarde;
+  document.getElementById("anticipado").innerText = anticipado;
+}
+
+cargar();
+setInterval(cargar, 2000);
+
+</script>
+
+</body>
+</html>
