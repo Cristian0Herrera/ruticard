@@ -16,8 +16,9 @@
   }
 
   nav {
-    background: #4984d2ab;
-    border-bottom: 1px solid #e5e5e3;
+    background: rgb(127, 181, 253);
+    border-bottom:none;
+    box-shadow:0 2px 10px rgba(0,0,0,.08);
     padding: 0 24px;
     height: 54px;
     display: flex;
@@ -321,7 +322,7 @@ if (sesion !== "conductor" || !conductorGuardado) {
     <div class="nav-logo">
       <img src="img/mini-logo.jpeg" alt="RutiCard">
     </div>
-    <span class="nav-name">Ruti<span>Card</span></span>
+    <span class="nav-name">RutiCard</span>
   </div>
   <div class="nav-right">
     <span class="nav-role" id="navRol">Conductor</span>
@@ -363,8 +364,8 @@ if (sesion !== "conductor" || !conductorGuardado) {
   </div>
 
     <div class="filters">
-    <input type="date" id="fechaInicio" onchange="cargar()">
-    <input type="date" id="fechaFin" onchange="cargar()">
+    <div class="date-group"><label>Desde</label><input type="date" id="fechaInicio" onchange="cargar()"></div>
+    <div class="date-group"><label>Hasta</label><input type="date" id="fechaFin" onchange="cargar()"></div>
     <button onclick="hoy()">Hoy</button>
     <button onclick="ultimaSemana()">Últimos 7 días</button>
     <button onclick="esteMes()">Este mes</button>

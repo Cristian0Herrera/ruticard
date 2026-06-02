@@ -17,8 +17,9 @@
 
   /* NAV */
   nav {
-    background: #4984d2ab;
-    border-bottom: 1px solid #e5e5e3;
+    background: rgb(127, 181, 253);
+    border-bottom:none;
+    box-shadow:0 2px 10px rgba(0,0,0,.08);
     padding: 0 24px;
     height: 54px;
     display: flex;
@@ -138,6 +139,44 @@
   display:grid;
   gap:8px;
   margin-bottom:14px;
+}
+
+.date-range{
+  display:flex;
+  align-items:center;
+  gap:8px;
+}
+
+.date-range span{
+  color:#666;
+  font-size:14px;
+  font-weight:500;
+}
+
+.date-range input{
+  min-width:150px;
+}
+
+@media (max-width:768px){
+
+  .filters{
+    display:grid;
+    grid-template-columns:1fr;
+    gap:10px;
+  }
+
+  .date-range{
+    width:100%;
+  }
+
+  .date-range input{
+    flex:1;
+    min-width:0;
+  }
+
+  .filters button{
+    width:100%;
+  }
 }
 
 /* Móvil */
@@ -330,13 +369,17 @@ if (localStorage.getItem("sesion") !== "admin") {
 
   <div class="filters">
     <input type="text" id="filtroNombre" placeholder="Buscar conductor..." onkeyup="cargar()">
+<div class="date-range">
     <input type="date" id="fechaInicio" onchange="cargar()">
+    <span>—</span>
     <input type="date" id="fechaFin" onchange="cargar()">
+</div>
     <button onclick="hoy()">Hoy</button>
     <button onclick="ultimaSemana()">Últimos 7 días</button>
     <button onclick="esteMes()">Este mes</button>
     <button class="btn-clear" onclick="limpiarFiltros()">Limpiar</button>
-  </div>
+
+</div>
 
   <div class="table-wrap">
     <table>
