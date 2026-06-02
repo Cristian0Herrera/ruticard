@@ -10,13 +10,13 @@
 
   body {
     font-family: 'Inter', sans-serif;
-    background: #f4f4f2;
+    background: #87acd33d;
     color: #1a1a1a;
     min-height: 100vh;
   }
 
   nav {
-    background: #fff;
+    background: #4984d2ab;
     border-bottom: 1px solid #e5e5e3;
     padding: 0 24px;
     height: 54px;
@@ -34,52 +34,47 @@
     gap: 10px;
   }
 
-  .nav-logo {
-    width: 32px; height: 32px;
-    background: #1a1a1a;
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    flex-shrink: 0;
-  }
+.nav-logo {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  overflow: hidden;
+  flex-shrink: 0;
+}
 
-  .nav-logo svg {
-    width: 17px; height: 17px;
-    stroke: #fff;
-    fill: none;
-    stroke-width: 1.7;
-    stroke-linecap: round;
-    stroke-linejoin: round;
-  }
+.nav-logo img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
 
   .nav-name {
-    font-size: 15px;
+    font-size: 25px;
     font-weight: 600;
-    color: #1a1a1a;
+    color: #ffffff;
     letter-spacing: -0.2px;
   }
-  .nav-name span { color: #888; font-weight: 400; }
+  .nav-name span { color: #ffffff; font-weight: 400; }
 
   .nav-right { display: flex; align-items: center; gap: 12px; }
 
-  .nav-role { font-size: 12px; color: #aaa; display: none; }
+  .nav-role { font-size: 12px; color: #000000; display: none; }
   @media (min-width: 500px) { .nav-role { display: block; } }
 
   .btn-logout {
     font-family: 'Inter', sans-serif;
     font-size: 12px;
     font-weight: 500;
-    color: #888;
-    background: none;
-    border: 1px solid #e0e0de;
+    color: #000000;
+    background: #425fdd5b;
+    border: 1px solid #3d55d198;
     border-radius: 6px;
     padding: 6px 14px;
     cursor: pointer;
     transition: all 0.15s;
     white-space: nowrap;
   }
-  .btn-logout:hover { border-color: #aaa; color: #333; }
+  .btn-logout:hover { border-color: #497be9; color: #ffffff; }
 
   main {
     max-width: 800px;
@@ -100,22 +95,28 @@
     margin-bottom: 16px;
   }
 
-  .avatar {
-    width: 44px; height: 44px;
+.avatar {
+    width: 44px;
+    height: 44px;
     background: #1a1a1a;
     border-radius: 50%;
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 14px;
-    font-weight: 600;
-    color: #fff;
     flex-shrink: 0;
-    letter-spacing: 0.5px;
-  }
+}
 
+.avatar-icon {
+    width: 22px;
+    height: 22px;
+    fill: none;
+    stroke: #fff;
+    stroke-width: 2;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+}
   .profile-name { font-size: 15px; font-weight: 600; }
-  .profile-sub  { font-size: 12px; color: #aaa; margin-top: 2px; }
+  .profile-sub  { font-size: 12px; color: #000000; margin-top: 2px; }
 
   .live {
     margin-left: auto;
@@ -154,7 +155,7 @@
   .stat-label {
     font-size: 11px;
     font-weight: 500;
-    color: #aaa;
+    color: #000000;
     letter-spacing: 0.04em;
     text-transform: uppercase;
     margin-bottom: 6px;
@@ -164,6 +165,101 @@
   .s-tiempo .stat-value { color: #16a34a; }
   .s-tarde  .stat-value { color: #d97706; }
   .s-ant    .stat-value { color: #2563eb; }
+
+  /* FILTERS */
+.filters{
+  display:grid;
+  gap:8px;
+  margin-bottom:14px;
+}
+
+/* Móvil */
+@media (max-width: 768px){
+
+  .filters{
+    grid-template-columns: 1fr 1fr;
+  }
+
+  /* Buscador ocupa toda la fila */
+  #filtroNombre{
+    grid-column: 1 / -1;
+  }
+
+  /* Inputs fecha */
+  #fechaInicio,
+  #fechaFin{
+    width:100%;
+  }
+
+  /* Botones 2 por fila */
+  .filters button{
+    width:100%;
+  }
+}
+
+/* Tablet y PC */
+@media (min-width: 769px){
+
+  .filters{
+    display:flex;
+    flex-wrap:wrap;
+    align-items:center;
+  }
+
+  .filters input[type="text"]{
+    flex:1;
+    min-width:250px;
+  }
+}
+
+  .filters input {
+    flex: 1;
+    min-width: 140px;
+    padding: 9px 12px;
+    border: 1px solid #e0e0de;
+    border-radius: 8px;
+    font-family: 'Inter', sans-serif;
+    font-size: 13px;
+    color: #1a1a1a;
+    background: #fff;
+    outline: none;
+    transition: border-color 0.15s;
+  }
+  .filters input:focus { border-color: #1a1a1a; }
+  .filters input::placeholder { color: #bbb; }
+
+    .filters button{
+    font-family:'Inter',sans-serif;
+    font-size:12px;
+    font-weight:500;
+    color:#888;
+    background:#fff;
+    border:1px solid #e0e0de;
+    border-radius:8px;
+    padding:9px 14px;
+    cursor:pointer;
+    transition:.15s;
+  }
+
+  .filters button:hover{
+    border-color:#aaa;
+    color:#333;
+  }
+
+  .btn-clear {
+    font-family: 'Inter', sans-serif;
+    font-size: 12px;
+    font-weight: 500;
+    color: #888;
+    background: #fff;
+    border: 1px solid #e0e0de;
+    border-radius: 8px;
+    padding: 9px 14px;
+    cursor: pointer;
+    white-space: nowrap;
+    transition: all 0.15s;
+  }
+  .btn-clear:hover { border-color: #aaa; color: #333; }
 
   /* TABLE */
   .table-wrap {
@@ -181,7 +277,7 @@
     font-weight: 500;
     letter-spacing: 0.04em;
     text-transform: uppercase;
-    color: #aaa;
+    color: #000000;
     padding: 12px 16px;
     text-align: left;
     border-bottom: 1px solid #e5e5e3;
@@ -211,16 +307,19 @@
 </style>
 </head>
 <body>
+<script>
+const sesion = localStorage.getItem("sesion");
+const conductorGuardado = localStorage.getItem("conductor");
+
+if (sesion !== "conductor" || !conductorGuardado) {
+    window.location.href = "index.html";
+}
+</script>
 
 <nav>
   <div class="nav-brand">
     <div class="nav-logo">
-      <svg viewBox="0 0 24 24">
-        <rect x="2" y="5" width="20" height="14" rx="2"/>
-        <path d="M2 10h20"/>
-        <path d="M6 15h4"/>
-        <path d="M14 15h4"/>
-      </svg>
+      <img src="img/mini-logo.jpeg" alt="RutiCard">
     </div>
     <span class="nav-name">Ruti<span>Card</span></span>
   </div>
@@ -232,12 +331,16 @@
 
 <main>
   <div class="profile">
-    <div class="avatar" id="avatarInitials">—</div>
+    <div class="avatar">
+      <svg viewBox="0 0 24 24" class="avatar-icon">
+        <path d="M12 12a4 4 0 1 0 0-8 4 4 0 0 0 0 8z"/>
+        <path d="M4 20a8 8 0 0 1 16 0"/>
+      </svg>
+    </div>
     <div>
       <div class="profile-name" id="nombreConductor">—</div>
       <div class="profile-sub">Conductor</div>
     </div>
-    <div class="live">En vivo</div>
   </div>
 
   <div class="stats">
@@ -259,6 +362,15 @@
     </div>
   </div>
 
+    <div class="filters">
+    <input type="date" id="fechaInicio" onchange="cargar()">
+    <input type="date" id="fechaFin" onchange="cargar()">
+    <button onclick="hoy()">Hoy</button>
+    <button onclick="ultimaSemana()">Últimos 7 días</button>
+    <button onclick="esteMes()">Este mes</button>
+    <button class="btn-clear" onclick="limpiarFiltros()">Limpiar</button>
+  </div>
+
   <div class="table-wrap">
     <table>
       <thead>
@@ -278,13 +390,66 @@
 
 <script>
 const API_URL = "https://script.google.com/macros/s/AKfycbxyDnxmULakEOrZuoXtDwZDHiZ39mCg7B1x6xtYJNA4iGSYHtIfzop8aFliUJxsiVedXw/exec?action=listar";
-const conductor = localStorage.getItem("conductor") || "—";
+const conductor = localStorage.getItem("conductor");
 
-document.getElementById("nombreConductor").innerText = "Conductor " + conductor;
-document.getElementById("avatarInitials").innerText  = conductor;
+document.getElementById("nombreConductor").innerText = conductor;
 document.getElementById("navRol").innerText = conductor;
 
-function cerrarSesion() { localStorage.removeItem("conductor"); window.location.href = "index.html"; }
+function cerrarSesion() {
+    localStorage.removeItem("sesion");
+    localStorage.removeItem("conductor");
+
+    window.location.href = "index.html";
+}
+
+function limpiarFiltros() {
+  document.getElementById("fechaInicio").value = "";
+  document.getElementById("fechaFin").value = "";
+  cargar();
+}
+
+  function hoy() {
+
+    const hoy = new Date().toISOString().split("T")[0];
+
+    document.getElementById("fechaInicio").value = hoy;
+    document.getElementById("fechaFin").value = hoy;
+
+    cargar();
+  }
+
+  function ultimaSemana() {
+
+    const hoy = new Date();
+
+    const hace7Dias = new Date();
+    hace7Dias.setDate(hoy.getDate() - 6);
+
+    document.getElementById("fechaInicio").value =
+      hace7Dias.toISOString().split("T")[0];
+
+    document.getElementById("fechaFin").value =
+      hoy.toISOString().split("T")[0];
+
+    cargar();
+  }
+
+  function esteMes() {
+
+    const hoy = new Date();
+
+    const primerDia =
+      new Date(hoy.getFullYear(), hoy.getMonth(), 1);
+
+    document.getElementById("fechaInicio").value =
+      primerDia.toISOString().split("T")[0];
+
+    document.getElementById("fechaFin").value =
+      hoy.toISOString().split("T")[0];
+
+    cargar();
+  }
+
 
 function badgeClass(e) {
   if (e === "A TIEMPO")   return "b-tiempo";
@@ -298,10 +463,37 @@ async function cargar() {
   try {
     const res  = await fetch(API_URL);
     const datos = await res.json();
+    const fechaInicio = document.getElementById("fechaInicio").value;
+    const fechaFin = document.getElementById("fechaFin").value;
+
     let html = "", total = 0, atiempo = 0, tarde = 0, anticipado = 0;
 
-    datos.forEach(r => {
-      if (r.id !== conductor) return;
+    [...datos].reverse().forEach(r => { if (r.id !== conductor) return;
+      let fechaRegistro = "";
+
+      if (String(r.fecha).includes("T")) {
+
+        const f = new Date(r.fecha);
+
+        fechaRegistro =
+          f.getFullYear() + "-" +
+          String(f.getMonth() + 1).padStart(2, "0") + "-" +
+          String(f.getDate()).padStart(2, "0");
+
+      } else {
+
+        const partes = String(r.fecha).split("/");
+
+        fechaRegistro =
+          partes[2] + "-" +
+          partes[1].padStart(2, "0") + "-" +
+          partes[0].padStart(2, "0");
+      }
+
+      if (fechaInicio && fechaRegistro < fechaInicio) return;
+
+      if (fechaFin && fechaRegistro > fechaFin) return;
+
       total++;
       if (r.estado === "A TIEMPO")   atiempo++;
       if (r.estado === "TARDE")      tarde++;
@@ -330,5 +522,13 @@ async function cargar() {
 cargar();
 setInterval(cargar, 2000);
 </script>
+<script>
+window.history.pushState(null, "", window.location.href);
+
+window.onpopstate = function () {
+    window.history.pushState(null, "", window.location.href);
+};
+</script>
+
 </body>
 </html>

@@ -1,72 +1,55 @@
-function login(){
+function login() {
 
-const usuario =
-document.getElementById("usuario").value;
+    const usuario = document.getElementById("usuario").value.trim();
+    const password = document.getElementById("password").value.trim();
+    const errorMsg = document.getElementById("errorMsg");
 
-const password =
-document.getElementById("password").value;
+    errorMsg.style.display = "none";
 
-// ADMIN
+    // Validar campos vacíos
+    if (!usuario || !password) {
+        errorMsg.textContent = "⚠ Debes completar todos los campos.";
+        errorMsg.style.display = "block";
+        return;
+    }
 
-if(
-usuario === "admin" &&
-password === "admin123"
-){
-window.location =
-"admin.html";
-return;
-}
+    // ADMIN
+    if (usuario === "admin" && password === "admin123") {
 
-// CONDUCTOR M01
+        localStorage.setItem("sesion", "admin");
 
-if(
-usuario === "M01" &&
-password === "1234"
-){
-localStorage.setItem(
-"conductor",
-"M01"
-);
+        window.location = "admin.html";
+        return;
+    }
 
-window.location =
-"conductor.html";
+    // CONDUCTORES
+    if (usuario === "M01" && password === "1234") {
 
-return;
-}
+        localStorage.setItem("sesion", "conductor");
+        localStorage.setItem("conductor", "M01");
 
-// CONDUCTOR M02
+        window.location = "conductor.html";
+        return;
+    }
 
-if(
-usuario === "M02" &&
-password === "1234"
-){
-localStorage.setItem(
-"conductor",
-"M02"
-);
+    if (usuario === "M02" && password === "1234") {
 
-window.location =
-"conductor.html";
+        localStorage.setItem("sesion", "conductor");
+        localStorage.setItem("conductor", "M02");
 
-return;
-}
+        window.location = "conductor.html";
+        return;
+    }
 
-// CONDUCTOR M03
+    if (usuario === "M03" && password === "1234") {
 
-if(
-usuario === "M03" &&
-password === "1234"
-){
-localStorage.setItem(
-"conductor",
-"M03"
-);
+        localStorage.setItem("sesion", "conductor");
+        localStorage.setItem("conductor", "M03");
 
-window.location =
-"conductor.html";
+        window.location = "conductor.html";
+        return;
+    }
 
-return;
-}
-
-alert("Credenciales incorrectas");
+    errorMsg.textContent = "⚠ Usuario o contraseña incorrectos.";
+    errorMsg.style.display = "block";
 }

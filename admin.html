@@ -10,14 +10,14 @@
 
   body {
     font-family: 'Inter', sans-serif;
-    background: #f4f4f2;
+    background: #87acd33d;
     color: #1a1a1a;
     min-height: 100vh;
   }
 
   /* NAV */
   nav {
-    background: #fff;
+    background: #4984d2ab;
     border-bottom: 1px solid #e5e5e3;
     padding: 0 24px;
     height: 54px;
@@ -35,34 +35,28 @@
     gap: 10px;
     text-decoration: none;
   }
+.nav-logo {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  overflow: hidden;
+  flex-shrink: 0;
+}
 
-  .nav-logo {
-    width: 32px; height: 32px;
-    background: #1a1a1a;
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    flex-shrink: 0;
-  }
-
-  .nav-logo svg {
-    width: 17px; height: 17px;
-    stroke: #fff;
-    fill: none;
-    stroke-width: 1.7;
-    stroke-linecap: round;
-    stroke-linejoin: round;
-  }
+.nav-logo img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
 
   .nav-name {
-    font-size: 15px;
+    font-size: 25px;
     font-weight: 600;
-    color: #1a1a1a;
+    color: #ffffff;
     letter-spacing: -0.2px;
   }
 
-  .nav-name span { color: #888; font-weight: 400; }
+  .nav-name span { color: #ffffff; font-weight: 400; }
 
   .nav-right {
     display: flex;
@@ -83,15 +77,15 @@
     font-size: 12px;
     font-weight: 500;
     color: #000000;
-    background: none;
-    border: 1px solid #e0e0de;
+    background: #425fdd5b;
+    border: 1px solid #3d55d198;
     border-radius: 6px;
     padding: 6px 14px;
     cursor: pointer;
     transition: all 0.15s;
     white-space: nowrap;
   }
-  .btn-logout:hover { border-color: #aaa; color: #333; }
+  .btn-logout:hover { border-color: #497be9; color: #ffffff; }
 
   /* MAIN */
   main {
@@ -140,12 +134,50 @@
   .s-ant    .stat-value { color: #2563eb; }
 
   /* FILTERS */
-  .filters {
-    display: flex;
-    gap: 8px;
-    margin-bottom: 14px;
-    flex-wrap: wrap;
+.filters{
+  display:grid;
+  gap:8px;
+  margin-bottom:14px;
+}
+
+/* Móvil */
+@media (max-width: 768px){
+
+  .filters{
+    grid-template-columns: 1fr 1fr;
   }
+
+  /* Buscador ocupa toda la fila */
+  #filtroNombre{
+    grid-column: 1 / -1;
+  }
+
+  /* Inputs fecha */
+  #fechaInicio,
+  #fechaFin{
+    width:100%;
+  }
+
+  /* Botones 2 por fila */
+  .filters button{
+    width:100%;
+  }
+}
+
+/* Tablet y PC */
+@media (min-width: 769px){
+
+  .filters{
+    display:flex;
+    flex-wrap:wrap;
+    align-items:center;
+  }
+
+  .filters input[type="text"]{
+    flex:1;
+    min-width:250px;
+  }
+}
 
   .filters input {
     flex: 1;
@@ -162,6 +194,24 @@
   }
   .filters input:focus { border-color: #1a1a1a; }
   .filters input::placeholder { color: #bbb; }
+
+    .filters button{
+    font-family:'Inter',sans-serif;
+    font-size:12px;
+    font-weight:500;
+    color:#888;
+    background:#fff;
+    border:1px solid #e0e0de;
+    border-radius:8px;
+    padding:9px 14px;
+    cursor:pointer;
+    transition:.15s;
+  }
+
+  .filters button:hover{
+    border-color:#aaa;
+    color:#333;
+  }
 
   .btn-clear {
     font-family: 'Inter', sans-serif;
@@ -234,18 +284,18 @@
 </style>
 </head>
 <body>
+<script>
+if (localStorage.getItem("sesion") !== "admin") {
+    window.location.href = "index.html";
+}
+</script>
 
 <nav>
   <div class="nav-brand">
     <div class="nav-logo">
-      <svg viewBox="0 0 24 24">
-        <rect x="2" y="5" width="20" height="14" rx="2"/>
-        <path d="M2 10h20"/>
-        <path d="M6 15h4"/>
-        <path d="M14 15h4"/>
-      </svg>
+      <img src="img/mini-logo.jpeg" alt="RutiCard">
     </div>
-    <span class="nav-name">Ruti<span>Card</span></span>
+    <span class="nav-name">RutiCard</span>
   </div>
   <div class="nav-right">
     <span class="nav-role">Administrador</span>
@@ -280,7 +330,11 @@
 
   <div class="filters">
     <input type="text" id="filtroNombre" placeholder="Buscar conductor..." onkeyup="cargar()">
-    <input type="date" id="filtroFecha" onchange="cargar()">
+    <input type="date" id="fechaInicio" onchange="cargar()">
+    <input type="date" id="fechaFin" onchange="cargar()">
+    <button onclick="hoy()">Hoy</button>
+    <button onclick="ultimaSemana()">Últimos 7 días</button>
+    <button onclick="esteMes()">Este mes</button>
     <button class="btn-clear" onclick="limpiarFiltros()">Limpiar</button>
   </div>
 
@@ -306,13 +360,60 @@
 <script>
 const URL = "https://script.google.com/macros/s/AKfycbxyDnxmULakEOrZuoXtDwZDHiZ39mCg7B1x6xtYJNA4iGSYHtIfzop8aFliUJxsiVedXw/exec?action=listar";
 
-function cerrarSesion() { localStorage.clear(); window.location.href = "index.html"; }
+function cerrarSesion() {
+    localStorage.removeItem("sesion");
+    localStorage.removeItem("conductor");
 
+    window.location.href = "index.html";
+}
 function limpiarFiltros() {
   document.getElementById("filtroNombre").value = "";
-  document.getElementById("filtroFecha").value = "";
+  document.getElementById("fechaInicio").value = "";
+  document.getElementById("fechaFin").value = "";
   cargar();
 }
+
+  function hoy() {
+
+    const hoy = new Date().toISOString().split("T")[0];
+
+    document.getElementById("fechaInicio").value = hoy;
+    document.getElementById("fechaFin").value = hoy;
+
+    cargar();
+  }
+
+  function ultimaSemana() {
+
+    const hoy = new Date();
+
+    const hace7Dias = new Date();
+    hace7Dias.setDate(hoy.getDate() - 6);
+
+    document.getElementById("fechaInicio").value =
+      hace7Dias.toISOString().split("T")[0];
+
+    document.getElementById("fechaFin").value =
+      hoy.toISOString().split("T")[0];
+
+    cargar();
+  }
+
+  function esteMes() {
+
+    const hoy = new Date();
+
+    const primerDia =
+      new Date(hoy.getFullYear(), hoy.getMonth(), 1);
+
+    document.getElementById("fechaInicio").value =
+      primerDia.toISOString().split("T")[0];
+
+    document.getElementById("fechaFin").value =
+      hoy.toISOString().split("T")[0];
+
+    cargar();
+  }
 
 function badgeClass(e) {
   if (e === "A TIEMPO")   return "b-tiempo";
@@ -327,18 +428,37 @@ async function cargar() {
     const res = await fetch(URL);
     const datos = await res.json();
     const nombre = document.getElementById("filtroNombre").value.toLowerCase();
-    const fecha  = document.getElementById("filtroFecha").value;
+    const fechaInicio = document.getElementById("fechaInicio").value;
+    const fechaFin = document.getElementById("fechaFin").value;
 
     let html = "", total = 0, atiempo = 0, tarde = 0, anticipado = 0;
 
     datos.reverse().forEach(r => {
       if (nombre && !`${r.nombre} ${r.apellido}`.toLowerCase().includes(nombre)) return;
-      let fechaFiltro = "";
+      let fechaRegistro = "";
+
       if (String(r.fecha).includes("T")) {
+
         const f = new Date(r.fecha);
-        fechaFiltro = f.getFullYear() + "-" + String(f.getMonth()+1).padStart(2,"0") + "-" + String(f.getDate()).padStart(2,"0");
+
+        fechaRegistro =
+          f.getFullYear() + "-" +
+          String(f.getMonth() + 1).padStart(2, "0") + "-" +
+          String(f.getDate()).padStart(2, "0");
+
+      } else {
+
+        const partes = String(r.fecha).split("/");
+
+        fechaRegistro =
+          partes[2] + "-" +
+          partes[1].padStart(2, "0") + "-" +
+          partes[0].padStart(2, "0");
       }
-      if (fecha && fechaFiltro !== fecha) return;
+
+      if (fechaInicio && fechaRegistro < fechaInicio) return;
+
+      if (fechaFin && fechaRegistro > fechaFin) return;
 
       total++;
       if (r.estado === "A TIEMPO")   atiempo++;
@@ -369,6 +489,14 @@ async function cargar() {
 
 cargar();
 setInterval(cargar, 2000);
+</script>
+
+<script>
+window.history.pushState(null, "", window.location.href);
+
+window.onpopstate = function () {
+    window.history.pushState(null, "", window.location.href);
+};
 </script>
 </body>
 </html>

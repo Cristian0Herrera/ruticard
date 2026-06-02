@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>RutiCard — Iniciar sesión</title>
 
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 
 <style>
 *,
@@ -18,7 +18,7 @@
 
 body{
     font-family:'Inter',sans-serif;
-    background:#f4f4f2;
+    background:#87acd33d;
     min-height:100vh;
     display:flex;
     justify-content:center;
@@ -35,7 +35,7 @@ body{
     background:#fff;
     border:1px solid #e5e5e3;
     border-radius:18px;
-    padding:110px 48px 48px;
+    padding:180px 48px 48px;
     box-shadow:0 10px 30px rgba(0,0,0,.04);
 }
 
@@ -46,6 +46,10 @@ body{
     left:50%;
     transform:translate(-50%,-50%);
     z-index:10;
+
+    display:flex;
+    flex-direction:column;
+    align-items:center;
 }
 
 .logo-img{
@@ -55,6 +59,25 @@ body{
     background:#fff;
     border-radius:50%;
     padding:8px;
+    margin-top:80px;
+}
+
+/* TEXTO RUTICARD */
+.logo-title{
+    margin-top:10px;
+    font-size:48px;
+    font-weight:800;
+    line-height:1;
+    letter-spacing:-2px;
+    white-space:nowrap;
+}
+
+.ruti{
+    color:#56A8E8;
+}
+
+.card-text{
+    color:#0D3D73;
 }
 
 /* TITULOS */
@@ -141,15 +164,19 @@ button:active{
 }
 
 /* RESPONSIVE */
-@media (max-width: 600px){
+@media (max-width:600px){
 
     .card{
-        padding:90px 24px 24px;
+        padding:150px 24px 24px;
     }
 
     .logo-img{
         width:110px;
         height:110px;
+    }
+
+    .logo-title{
+        font-size:36px;
     }
 
     h1{
@@ -163,9 +190,12 @@ button:active{
 
 <div class="card">
 
-    <!-- Logo -->
     <div class="logo-wrap">
         <img src="img/logo.jpg" alt="RutiCard" class="logo-img">
+
+        <div class="logo-title">
+            <span class="ruti">Ruti</span><span class="card-text">Card</span>
+        </div>
     </div>
 
     <h1>Iniciar sesión</h1>
@@ -176,7 +206,6 @@ button:active{
         <input
             id="usuario"
             type="text"
-            placeholder="Ej. M01"
             autocomplete="off">
     </div>
 
@@ -185,7 +214,6 @@ button:active{
         <input
             id="password"
             type="password"
-            placeholder="••••••••"
             onkeydown="if(event.key==='Enter') login()">
     </div>
 
