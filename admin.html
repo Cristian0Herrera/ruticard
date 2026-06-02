@@ -1,284 +1,374 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-<title>Administrador</title>
-
-<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
-
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>RutiCard — Administrador</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
 <style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
-.estado-tiempo{
-  background:#70b318;
-  font-weight:bold;
-}
+  body {
+    font-family: 'Inter', sans-serif;
+    background: #f4f4f2;
+    color: #1a1a1a;
+    min-height: 100vh;
+  }
 
-.estado-tarde{
-  background:#e0bc2b;
-  font-weight:bold;
-}
+  /* NAV */
+  nav {
+    background: #fff;
+    border-bottom: 1px solid #e5e5e3;
+    padding: 0 24px;
+    height: 54px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    position: sticky;
+    top: 0;
+    z-index: 10;
+  }
 
-.estado-muy-tarde{
-  background:#d12340;
-  color:white;
-  font-weight:bold;
-}
+  .nav-brand {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    text-decoration: none;
+  }
 
-.estado-anticipado{
-  background:#2ff0f7;
-  font-weight:bold;
-}
+  .nav-logo {
+    width: 32px; height: 32px;
+    background: #1a1a1a;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+  }
 
+  .nav-logo svg {
+    width: 17px; height: 17px;
+    stroke: #fff;
+    fill: none;
+    stroke-width: 1.7;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+  }
+
+  .nav-name {
+    font-size: 15px;
+    font-weight: 600;
+    color: #1a1a1a;
+    letter-spacing: -0.2px;
+  }
+
+  .nav-name span { color: #888; font-weight: 400; }
+
+  .nav-right {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+
+  .nav-role {
+    font-size: 12px;
+    color: #000000;
+    display: none;
+  }
+
+  @media (min-width: 500px) { .nav-role { display: block; } }
+
+  .btn-logout {
+    font-family: 'Inter', sans-serif;
+    font-size: 12px;
+    font-weight: 500;
+    color: #000000;
+    background: none;
+    border: 1px solid #e0e0de;
+    border-radius: 6px;
+    padding: 6px 14px;
+    cursor: pointer;
+    transition: all 0.15s;
+    white-space: nowrap;
+  }
+  .btn-logout:hover { border-color: #aaa; color: #333; }
+
+  /* MAIN */
+  main {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 28px 16px 64px;
+  }
+
+  @media (min-width: 600px) { main { padding: 28px 24px 64px; } }
+
+  .page-head { margin-bottom: 20px; }
+  .page-head h1 { font-size: 18px; font-weight: 600; }
+  .page-head p  { font-size: 13px; color: #000000; margin-top: 2px; }
+
+  /* STATS */
+  .stats {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 10px;
+    margin-bottom: 20px;
+  }
+
+  @media (min-width: 640px) {
+    .stats { grid-template-columns: repeat(4, 1fr); }
+  }
+
+  .stat {
+    background: #fff;
+    border: 1px solid #e5e5e3;
+    border-radius: 10px;
+    padding: 14px 16px;
+  }
+
+  .stat-label {
+    font-size: 11px;
+    font-weight: 500;
+    color: #000000;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    margin-bottom: 6px;
+  }
+
+  .stat-value { font-size: 26px; font-weight: 600; color: #1a1a1a; }
+  .s-tiempo .stat-value { color: #16a34a; }
+  .s-tarde  .stat-value { color: #d97706; }
+  .s-ant    .stat-value { color: #2563eb; }
+
+  /* FILTERS */
+  .filters {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 14px;
+    flex-wrap: wrap;
+  }
+
+  .filters input {
+    flex: 1;
+    min-width: 140px;
+    padding: 9px 12px;
+    border: 1px solid #e0e0de;
+    border-radius: 8px;
+    font-family: 'Inter', sans-serif;
+    font-size: 13px;
+    color: #1a1a1a;
+    background: #fff;
+    outline: none;
+    transition: border-color 0.15s;
+  }
+  .filters input:focus { border-color: #1a1a1a; }
+  .filters input::placeholder { color: #bbb; }
+
+  .btn-clear {
+    font-family: 'Inter', sans-serif;
+    font-size: 12px;
+    font-weight: 500;
+    color: #888;
+    background: #fff;
+    border: 1px solid #e0e0de;
+    border-radius: 8px;
+    padding: 9px 14px;
+    cursor: pointer;
+    white-space: nowrap;
+    transition: all 0.15s;
+  }
+  .btn-clear:hover { border-color: #aaa; color: #333; }
+
+  /* TABLE */
+  .table-wrap {
+    background: #fff;
+    border: 1px solid #e5e5e3;
+    border-radius: 10px;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  table { width: 100%; border-collapse: collapse; min-width: 540px; }
+
+  thead th {
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    color: #000000;
+    padding: 12px 16px;
+    text-align: left;
+    border-bottom: 1px solid #e5e5e3;
+    background: #fafaf9;
+    white-space: nowrap;
+  }
+
+  tbody tr { border-bottom: 1px solid #f0f0ee; }
+  tbody tr:last-child { border-bottom: none; }
+  tbody tr:hover { background: #fafaf9; }
+
+  tbody td { padding: 12px 16px; font-size: 13px; color: #333; white-space: nowrap; }
+
+  .id-tag {
+    font-size: 11px;
+    font-weight: 500;
+    background: #f1f1ef;
+    color: #555;
+    padding: 3px 8px;
+    border-radius: 5px;
+  }
+
+  .badge {
+    font-size: 11px;
+    font-weight: 500;
+    padding: 3px 9px;
+    border-radius: 5px;
+    display: inline-block;
+    white-space: nowrap;
+  }
+  .b-tiempo   { background: #dcfce7; color: #166534; }
+  .b-tarde    { background: #fef3c7; color: #92400e; }
+  .b-muytarde { background: #fee2e2; color: #991b1b; }
+  .b-ant      { background: #dbeafe; color: #1e3a8a; }
+
+  .empty td { text-align: center; padding: 40px; color: #bbb; font-size: 13px; }
 </style>
-
 </head>
-
 <body>
 
-<div class="container mt-4">
+<nav>
+  <div class="nav-brand">
+    <div class="nav-logo">
+      <svg viewBox="0 0 24 24">
+        <rect x="2" y="5" width="20" height="14" rx="2"/>
+        <path d="M2 10h20"/>
+        <path d="M6 15h4"/>
+        <path d="M14 15h4"/>
+      </svg>
+    </div>
+    <span class="nav-name">Ruti<span>Card</span></span>
+  </div>
+  <div class="nav-right">
+    <span class="nav-role">Administrador</span>
+    <button class="btn-logout" onclick="cerrarSesion()">Cerrar sesión</button>
+  </div>
+</nav>
 
-<h2>Panel Administrador</h2>
-
-<div class="d-flex justify-content-between align-items-center mb-3">
-
-  <h4>Todos los registros</h4>
-
-  <button class="btn btn-danger" onclick="cerrarSesion()">
-    Cerrar sesión
-  </button>
-
-</div>
-
-<!-- FILTROS -->
-
-<div class="row mb-3">
-
-  <div class="col-md-4">
-    <input
-      type="text"
-      id="filtroNombre"
-      class="form-control"
-      placeholder="Buscar conductor..."
-      onkeyup="cargar()">
+<main>
+  <div class="page-head">
+    <h1>Panel administrador</h1>
+    <p>Todos los registros del sistema</p>
   </div>
 
-  <div class="col-md-4">
-    <input
-      type="date"
-      id="filtroFecha"
-      class="form-control"
-      onchange="cargar()">
-  </div>
-
-  <div class="col-md-2">
-    <button
-      class="btn btn-secondary w-100"
-      onclick="limpiarFiltros()">
-      Limpiar
-    </button>
-  </div>
-
-</div>
-
-<!-- TARJETAS -->
-
-<div class="row mb-4">
-
-  <div class="col-md-3">
-    <div class="card text-center">
-      <div class="card-body">
-        <h5>Total</h5>
-        <h3 id="total">0</h3>
-      </div>
+  <div class="stats">
+    <div class="stat">
+      <div class="stat-label">Total</div>
+      <div class="stat-value" id="total">0</div>
+    </div>
+    <div class="stat s-tiempo">
+      <div class="stat-label">A tiempo</div>
+      <div class="stat-value" id="atiempo">0</div>
+    </div>
+    <div class="stat s-tarde">
+      <div class="stat-label">Tarde</div>
+      <div class="stat-value" id="tarde">0</div>
+    </div>
+    <div class="stat s-ant">
+      <div class="stat-label">Anticipado</div>
+      <div class="stat-value" id="anticipado">0</div>
     </div>
   </div>
 
-  <div class="col-md-3">
-    <div class="card text-center">
-      <div class="card-body">
-        <h5>A Tiempo</h5>
-        <h3 id="atiempo">0</h3>
-      </div>
-    </div>
+  <div class="filters">
+    <input type="text" id="filtroNombre" placeholder="Buscar conductor..." onkeyup="cargar()">
+    <input type="date" id="filtroFecha" onchange="cargar()">
+    <button class="btn-clear" onclick="limpiarFiltros()">Limpiar</button>
   </div>
 
-  <div class="col-md-3">
-    <div class="card text-center">
-      <div class="card-body">
-        <h5>Tarde</h5>
-        <h3 id="tarde">0</h3>
-      </div>
-    </div>
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>Nombre</th>
+          <th>Fecha</th>
+          <th>Hora</th>
+          <th>Ruta</th>
+          <th>Estado</th>
+        </tr>
+      </thead>
+      <tbody id="tabla">
+        <tr class="empty"><td colspan="6">Cargando...</td></tr>
+      </tbody>
+    </table>
   </div>
-
-  <div class="col-md-3">
-    <div class="card text-center">
-      <div class="card-body">
-        <h5>Anticipado</h5>
-        <h3 id="anticipado">0</h3>
-      </div>
-    </div>
-  </div>
-
-</div>
-
-<!-- TABLA -->
-
-<table class="table table-bordered table-hover">
-
-<thead>
-
-<tr>
-<th>ID</th>
-<th>Nombre</th>
-<th>Fecha</th>
-<th>Hora</th>
-<th>Ruta</th>
-<th>Estado</th>
-</tr>
-
-</thead>
-
-<tbody id="tabla">
-
-</tbody>
-
-</table>
-
-</div>
+</main>
 
 <script>
+const URL = "https://script.google.com/macros/s/AKfycbxyDnxmULakEOrZuoXtDwZDHiZ39mCg7B1x6xtYJNA4iGSYHtIfzop8aFliUJxsiVedXw/exec?action=listar";
 
-const URL =
-"https://script.google.com/macros/s/AKfycbxyDnxmULakEOrZuoXtDwZDHiZ39mCg7B1x6xtYJNA4iGSYHtIfzop8aFliUJxsiVedXw/exec?action=listar";
+function cerrarSesion() { localStorage.clear(); window.location.href = "index.html"; }
 
-function cerrarSesion(){
-
-  localStorage.clear();
-  window.location.href = "index.html";
-}
-
-function limpiarFiltros(){
-
+function limpiarFiltros() {
   document.getElementById("filtroNombre").value = "";
   document.getElementById("filtroFecha").value = "";
-
   cargar();
 }
 
-async function cargar(){
+function badgeClass(e) {
+  if (e === "A TIEMPO")   return "b-tiempo";
+  if (e === "TARDE")      return "b-tarde";
+  if (e === "MUY TARDE")  return "b-muytarde";
+  if (e === "ANTICIPADO") return "b-ant";
+  return "";
+}
 
-  const res = await fetch(URL);
-  const datos = await res.json();
+async function cargar() {
+  try {
+    const res = await fetch(URL);
+    const datos = await res.json();
+    const nombre = document.getElementById("filtroNombre").value.toLowerCase();
+    const fecha  = document.getElementById("filtroFecha").value;
 
-  const nombreBuscado =
-    document.getElementById("filtroNombre")
-    .value
-    .toLowerCase();
+    let html = "", total = 0, atiempo = 0, tarde = 0, anticipado = 0;
 
-  const fechaBuscada =
-    document.getElementById("filtroFecha")
-    .value;
+    datos.reverse().forEach(r => {
+      if (nombre && !`${r.nombre} ${r.apellido}`.toLowerCase().includes(nombre)) return;
+      let fechaFiltro = "";
+      if (String(r.fecha).includes("T")) {
+        const f = new Date(r.fecha);
+        fechaFiltro = f.getFullYear() + "-" + String(f.getMonth()+1).padStart(2,"0") + "-" + String(f.getDate()).padStart(2,"0");
+      }
+      if (fecha && fechaFiltro !== fecha) return;
 
-  let html = "";
+      total++;
+      if (r.estado === "A TIEMPO")   atiempo++;
+      if (r.estado === "TARDE")      tarde++;
+      if (r.estado === "ANTICIPADO") anticipado++;
 
-  let total = 0;
-  let atiempo = 0;
-  let tarde = 0;
-  let anticipado = 0;
+      let fd = r.fecha, ho = r.hora;
+      if (String(fd).includes("T")) fd = new Date(fd).toLocaleDateString("es-SV");
+      if (String(ho).includes("T")) ho = new Date(ho).toLocaleTimeString("es-SV");
 
-  datos.reverse().forEach(r => {
-
-    let nombreCompleto =
-      `${r.nombre} ${r.apellido}`.toLowerCase();
-
-    if (
-      nombreBuscado &&
-      !nombreCompleto.includes(nombreBuscado)
-    ) {
-      return;
-    }
-
-    let fechaFiltro = "";
-
-    if (String(r.fecha).includes("T")) {
-
-      const f = new Date(r.fecha);
-
-      fechaFiltro =
-        f.getFullYear() + "-" +
-        String(f.getMonth() + 1).padStart(2,"0") + "-" +
-        String(f.getDate()).padStart(2,"0");
-    }
-
-    if (
-      fechaBuscada &&
-      fechaFiltro !== fechaBuscada
-    ) {
-      return;
-    }
-
-    total++;
-
-    if(r.estado === "A TIEMPO") atiempo++;
-    if(r.estado === "TARDE") tarde++;
-    if(r.estado === "ANTICIPADO") anticipado++;
-
-    let fecha = r.fecha;
-    let hora = r.hora;
-
-    if(String(fecha).includes("T")){
-      fecha = new Date(fecha).toLocaleDateString("es-SV");
-    }
-
-    if(String(hora).includes("T")){
-      hora = new Date(hora).toLocaleTimeString("es-SV");
-    }
-
-    let colorEstado = "";
-
-    if(r.estado === "A TIEMPO"){
-      colorEstado = "table-success";
-    }
-    else if(r.estado === "TARDE"){
-      colorEstado = "table-warning";
-    }
-    else if(r.estado === "MUY TARDE"){
-      colorEstado = "table-danger";
-    }
-    else if(r.estado === "ANTICIPADO"){
-      colorEstado = "table-info";
-    }
-
-    html += `
-      <tr>
-        <td>${r.id}</td>
+      html += `<tr>
+        <td><span class="id-tag">${r.id}</span></td>
         <td>${r.nombre} ${r.apellido}</td>
-        <td>${fecha}</td>
-        <td>${hora}</td>
-        <td>${r.ruta}</td>
-        <td class="${colorEstado}">
-          <strong>${r.estado}</strong>
-        </td>
-      </tr>
-    `;
-  });
+        <td>${fd}</td><td>${ho}</td><td>${r.ruta}</td>
+        <td><span class="badge ${badgeClass(r.estado)}">${r.estado}</span></td>
+      </tr>`;
+    });
 
-  document.getElementById("tabla").innerHTML = html;
-
-  document.getElementById("total").innerText = total;
-  document.getElementById("atiempo").innerText = atiempo;
-  document.getElementById("tarde").innerText = tarde;
-  document.getElementById("anticipado").innerText = anticipado;
+    document.getElementById("tabla").innerHTML = html || `<tr class="empty"><td colspan="6">Sin resultados</td></tr>`;
+    document.getElementById("total").innerText     = total;
+    document.getElementById("atiempo").innerText   = atiempo;
+    document.getElementById("tarde").innerText     = tarde;
+    document.getElementById("anticipado").innerText = anticipado;
+  } catch(e) {
+    document.getElementById("tabla").innerHTML = `<tr class="empty"><td colspan="6">Error al cargar</td></tr>`;
+  }
 }
 
 cargar();
 setInterval(cargar, 2000);
-
 </script>
-
 </body>
 </html>
