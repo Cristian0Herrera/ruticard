@@ -462,14 +462,26 @@ function badgeClass(e) {
 
 async function cargar() {
   try {
-    const res  = await fetch(API_URL);
+
+    const res = await fetch(API_URL);
     const datos = await res.json();
-    const fechaInicio = document.getElementById("fechaInicio").value;
-    const fechaFin = document.getElementById("fechaFin").value;
 
-    let html = "", total = 0, atiempo = 0, tarde = 0, anticipado = 0;
+    const fechaInicio =
+      document.getElementById("fechaInicio").value;
 
-    [...datos].reverse().forEach(r => { if (r.id !== conductor) return;
+    const fechaFin =
+      document.getElementById("fechaFin").value;
+
+    let html = "";
+    let total = 0;
+    let atiempo = 0;
+    let tarde = 0;
+    let anticipado = 0;
+
+    [...datos].reverse().forEach(r => {
+
+      if (r.id !== conductor) return;
+
       let fechaRegistro = "";
 
       if (String(r.fecha).includes("T")) {
@@ -492,33 +504,58 @@ async function cargar() {
       }
 
       if (fechaInicio && fechaRegistro < fechaInicio) return;
-
       if (fechaFin && fechaRegistro > fechaFin) return;
 
       total++;
-      if (r.estado === "A TIEMPO")   atiempo++;
-      if (r.estado === "TARDE")      tarde++;
+
+      if (r.estado === "A TIEMPO") atiempo++;
+      if (r.estado === "TARDE") tarde++;
       if (r.estado === "ANTICIPADO") anticipado++;
 
-      let fd = r.fecha, ho = r.hora;
-      if (String(fd).includes("T")) fd = new Date(fd).toLocaleDateString("es-SV");
-      if (String(ho).includes("T")) ho = new Date(ho).toLocaleTimeString("es-SV");
+      let fd = r.fecha;
+      let ho = r.hora;
 
-      html += `<tr>
-        <td>${fd}</td><td>${ho}</td><td>${r.ruta}</td>
-        <td><span class="badge ${badgeClass(r.estado)}">${r.estado}</span></td>
-      </tr>`;
+      if (String(fd).includes("T")) {
+        fd = new Date(fd).toLocaleDateString("es-SV");
+      }
+
+      if (String(ho).includes("T")) {
+        ho = new Date(ho).toLocaleTimeString("es-SV");
+      }
+
+      html += `
+        <tr>
+          <td>${fd}</td>
+          <td>${ho}</td>
+          <td>${r.ruta}</td>
+          <td>
+            <span class="badge ${badgeClass(r.estado)}">
+              ${r.estado}
+            </span>
+          </td>
+        </tr>
+      `;
     });
 
-    document.getElementById("tabla").innerHTML     = html || `<tr class="empty"><td colspan="4">Sin registros</td></tr>`;
-    document.getElementById("total").innerText      = total;
-    document.getElementById("atiempo").innerText    = atiempo;
-    document.getElementById("tarde").innerText      = tarde;
+    document.getElementById("tabla").innerHTML =
+      html || `<tr class="empty"><td colspan="4">Sin registros</td></tr>`;
+
+    document.getElementById("total").innerText = total;
+    document.getElementById("atiempo").innerText = atiempo;
+    document.getElementById("tarde").innerText = tarde;
     document.getElementById("anticipado").innerText = anticipado;
-  } catch(e) {
-    document.getElementById("tabla").innerHTML = `<tr class="empty"><td colspan="4">Error al cargar</td></tr>`;
+
+  } catch (e) {
+
+    document.getElementById("tabla").innerHTML =
+      `<tr class="empty"><td colspan="4">Error al cargar</td></tr>`;
   }
 }
+
+const fechaHoy = new Date().toISOString().split("T")[0];
+
+document.getElementById("fechaInicio").value = fechaHoy;
+document.getElementById("fechaFin").value = fechaHoy;
 
 cargar();
 setInterval(cargar, 2000);
