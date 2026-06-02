@@ -364,8 +364,8 @@ if (sesion !== "conductor" || !conductorGuardado) {
   </div>
 
     <div class="filters">
-    <div class="date-group"><label>Desde</label><input type="date" id="fechaInicio" onchange="cargar()"></div>
-    <div class="date-group"><label>Hasta</label><input type="date" id="fechaFin" onchange="cargar()"></div>
+    <input type="date" id="fechaInicio" onchange="cargar()">
+    <input type="date" id="fechaFin" onchange="cargar()">
     <button onclick="hoy()">Hoy</button>
     <button onclick="ultimaSemana()">Últimos 7 días</button>
     <button onclick="esteMes()">Este mes</button>
