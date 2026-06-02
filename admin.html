@@ -141,44 +141,6 @@
   margin-bottom:14px;
 }
 
-.date-range{
-  display:flex;
-  align-items:center;
-  gap:8px;
-}
-
-.date-range span{
-  color:#666;
-  font-size:14px;
-  font-weight:500;
-}
-
-.date-range input{
-  min-width:150px;
-}
-
-@media (max-width:768px){
-
-  .filters{
-    display:grid;
-    grid-template-columns:1fr;
-    gap:10px;
-  }
-
-  .date-range{
-    width:100%;
-  }
-
-  .date-range input{
-    flex:1;
-    min-width:0;
-  }
-
-  .filters button{
-    width:100%;
-  }
-}
-
 /* Móvil */
 @media (max-width: 768px){
 
@@ -231,6 +193,20 @@
     outline: none;
     transition: border-color 0.15s;
   }
+
+  .date-group{
+    display:flex;
+    flex-direction:column;
+    gap:4px;
+    
+}
+
+  .date-group label{
+      font-size:12px;
+      font-weight:600;
+      color:#666;
+  }
+
   .filters input:focus { border-color: #1a1a1a; }
   .filters input::placeholder { color: #bbb; }
 
@@ -369,11 +345,8 @@ if (localStorage.getItem("sesion") !== "admin") {
 
   <div class="filters">
     <input type="text" id="filtroNombre" placeholder="Buscar conductor..." onkeyup="cargar()">
-<div class="date-range">
     <input type="date" id="fechaInicio" onchange="cargar()">
-    <span>—</span>
     <input type="date" id="fechaFin" onchange="cargar()">
-</div>
     <button onclick="hoy()">Hoy</button>
     <button onclick="ultimaSemana()">Últimos 7 días</button>
     <button onclick="esteMes()">Este mes</button>
